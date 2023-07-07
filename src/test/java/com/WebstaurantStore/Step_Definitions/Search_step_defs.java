@@ -11,6 +11,7 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +80,8 @@ public class Search_step_defs {
         cartPage.viewCartButton.click();
         cartPage.emptyCartButton.click();
 
+        Actions act =  new Actions(Driver.getDriver());
+        act.moveToElement(cartPage.emptyCartAlertButton).click().perform();
     }
 
 }

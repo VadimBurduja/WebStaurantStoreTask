@@ -16,6 +16,9 @@ public class CartPage {
     @FindBy(xpath = "//button[normalize-space()='View Cart']")
     public WebElement viewCartButton;
 
-    @FindBy(css = ".add-to-cart")//*[@name="addToCartButton"].add-to-cart
+    @FindBy(css = ".add-to-cart")
     public WebElement addToCart;
+
+    @FindBy(xpath = "//button[contains(text(),'Empty Cart')]")
+    public WebElement emptyCartAlertButton;
 }
