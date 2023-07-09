@@ -72,16 +72,18 @@ public class Search_step_defs {
         WebElement lastItem = mainPage.searchResults.get(mainPage.searchResults.size()-1);
         lastItem.click();
         cartPage.addToCart.click();
-        BrowserUtils.waitFor(10);
 
     }
     @Then("Empty the Cart")
     public void empty_the_cart() {
-        cartPage.viewCartButton.click();
+        cartPage.CartButton.click();
+        BrowserUtils.waitFor(2);
         cartPage.emptyCartButton.click();
-
+        BrowserUtils.waitFor(2);
         Actions act =  new Actions(Driver.getDriver());
         act.moveToElement(cartPage.emptyCartAlertButton).click().perform();
+
+        Assert.assertTrue("Your cart is empty", cartPage.isCartEmpty());
     }
 
 }

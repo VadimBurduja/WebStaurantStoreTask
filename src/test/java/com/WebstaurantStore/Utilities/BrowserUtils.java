@@ -10,14 +10,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class BrowserUtils {
-    public static void sleep(int second){
-        second *= 1000;
-        try{
-            Thread.sleep(second);
-        }catch (InterruptedException e){
-
-        }
-    }
 
     public static void waitFor(int seconds) {
         try {
@@ -30,17 +22,5 @@ public class BrowserUtils {
         Actions actions = new Actions(Driver.getDriver());
         actions.moveToElement(element).perform();
     }
-    public static void waitForPageToLoad(long time) {
-        ExpectedCondition<Boolean> expectation = new ExpectedCondition<Boolean>() {
-            public Boolean apply(WebDriver driver) {
-                return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
-            }
-        };
-        try {
-            WebDriverWait wait = new WebDriverWait(Driver.getDriver(), Duration.ofSeconds(time));
-            wait.until(expectation);
-        } catch (Throwable error) {
-            error.printStackTrace();
-        }
-    }
+
 }

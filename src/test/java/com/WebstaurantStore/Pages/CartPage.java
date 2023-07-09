@@ -10,15 +10,24 @@ public class CartPage {
         PageFactory.initElements(Driver.getDriver(),this);
     }
 
-    @FindBy(xpath = "//button[normalize-space()='Empty Cart']")
+
+
+    @FindBy(css= ".emptyCartButton.btn.btn-mini.btn-ui.pull-right")
     public WebElement emptyCartButton;
 
-    @FindBy(xpath = "//button[normalize-space()='View Cart']")
-    public WebElement viewCartButton;
+    @FindBy(css = ".bg-gray-100.border-gray-300.border-solid.border-0.border-t button:nth-child(1)")
+    public WebElement emptyCartAlertButton;
+
+    @FindBy(css = ".group.flex.rounded-tl.rounded-bl.overflow-hidden span:nth-child(1)\n")
+    public WebElement CartButton;
 
     @FindBy(css = ".add-to-cart")
     public WebElement addToCart;
 
-    @FindBy(xpath = "//button[contains(text(),'Empty Cart')]")
-    public WebElement emptyCartAlertButton;
+    @FindBy(css = ".header-1")
+    public WebElement cartEmptyMessage;
+
+    public boolean isCartEmpty() {
+        return cartEmptyMessage.isDisplayed();
+    }
 }
