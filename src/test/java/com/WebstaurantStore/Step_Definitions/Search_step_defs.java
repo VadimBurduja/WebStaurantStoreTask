@@ -46,16 +46,11 @@ public class Search_step_defs {
         int currentPage = 1;
 
         while (currentPage<= mainPage.allPages.size()) {
-            System.out.println("Checking titles on page " + currentPage);
-            System.out.println("Number of search results: " + mainPage.searchResults.size());
-
 
             for (WebElement element : mainPage.searchResults) {
                 String title = element.getText();
-                System.out.println("Title: " + title);
                 titles.add(title);
             }
-
             if (currentPage==mainPage.allPages.size()) {
                 break;
             }
@@ -65,24 +60,23 @@ public class Search_step_defs {
         boolean isKeywordFound = titles.stream().anyMatch(title -> title.contains(keyword));
         Assert.assertTrue("At least one title contains the keyword: " + keyword, isKeywordFound);
     }
-
-
     @Then("Add the last of found items to Cart")
     public void add_the_last_of_found_items_to_cart() {
         WebElement lastItem = mainPage.searchResults.get(mainPage.searchResults.size()-1);
         lastItem.click();
         cartPage.addToCart.click();
+        BrowserUtils.waitFor(2);
 
     }
     @Then("Empty the Cart")
     public void empty_the_cart() {
         cartPage.CartButton.click();
-        BrowserUtils.waitFor(2);
+        BrowserUtils.waitFor(1);
         cartPage.emptyCartButton.click();
-        BrowserUtils.waitFor(2);
+        BrowserUtils.waitFor(1);
         Actions act =  new Actions(Driver.getDriver());
         act.moveToElement(cartPage.emptyCartAlertButton).click().perform();
-
+        BrowserUtils.waitFor(2);
         Assert.assertTrue("Your cart is empty", cartPage.isCartEmpty());
     }
 

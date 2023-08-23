@@ -12,16 +12,16 @@ public class CartPage {
 
 
 
-    @FindBy(css= ".emptyCartButton.btn.btn-mini.btn-ui.pull-right")
+    @FindBy(xpath= "//button[normalize-space()='Empty Cart']")
     public WebElement emptyCartButton;
 
     @FindBy(css = ".bg-gray-100.border-gray-300.border-solid.border-0.border-t button:nth-child(1)")
     public WebElement emptyCartAlertButton;
 
-    @FindBy(css = ".group.flex.rounded-tl.rounded-bl.overflow-hidden span:nth-child(1)\n")
+    @FindBy(xpath = "//a[@class='btn btn-primary']")
     public WebElement CartButton;
 
-    @FindBy(css = ".add-to-cart")
+    @FindBy(id = "buyButton")
     public WebElement addToCart;
 
     @FindBy(css = ".header-1")
