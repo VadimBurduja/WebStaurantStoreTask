@@ -9,10 +9,13 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,64 +23,65 @@ public class Search_step_defs {
     MainPage mainPage = new MainPage();
     CartPage cartPage = new CartPage();
 
-    @Given("I am on the webstauranstore homepage")
-    public void i_am_on_the_webstauranstore_homepage() {
+    @Given("Customer is on the webstauranstore homepage")
+    public void customer_is_on_the_webstauranstore_homepage(){
         String expectedUrl = ConfigurationReader.getProperty("WebstaurantStoreUrl");
         String actualUrl = Driver.getDriver().getCurrentUrl();
         Assert.assertEquals(expectedUrl,actualUrl);
 
     }
-    @When("I search for the product {string}")
-    public void i_search_for_the_product(String product) {
+    @When("Customer search for the product {string}")
+    public void customer_search_for_the_product(String product) {
         mainPage.searchBox.sendKeys(product);
-        mainPage.searchButton.click();
+        mainPage.searchBox.sendKeys(Keys.ENTER);
 
     }
-    @Then("I should see the search results")
-    public void i_should_see_the_search_results() {
-        boolean searchResultsIsDisplayed=Driver.getDriver().findElement(By.cssSelector("span[data-testid='itemDescription']")).isDisplayed();
+    @Then("Customer should see the search results")
+    public void customer_should_see_the_search_results() {
+        boolean searchResultsIsDisplayed=mainPage.itemDescription.isDisplayed();
         System.out.println("searchResultsIsDisplayed = " + searchResultsIsDisplayed);
 
 
     }
-    @Then("I verify that all product titles contain the keyword {string}")
-    public void i_verify_that_all_product_titles_contain_the_keyword(String keyword) {
-        List<String> titles = new ArrayList<>();
-        int currentPage = 1;
+    @Then("Verifies that all product titles contain the keyword {string}")
+    public void verifies_that_all_product_titles_contain_the_keyword(String keyword) {
 
-        while (currentPage<= mainPage.allPages.size()) {
+            List<String> nonMatchingTitles = BrowserUtils.findNonMatchingTitles(mainPage, keyword);
 
-            for (WebElement element : mainPage.searchResults) {
-                String title = element.getText();
-                titles.add(title);
+            if (!nonMatchingTitles.isEmpty()) {
+                System.out.println("Some titles do not contain the keyword '" + keyword + "':");
+                for (String title : nonMatchingTitles) {
+                    System.out.println(title);
+                }
+                // Failing the test with detailed information
+                Assert.fail("Some titles do not contain the keyword '" + keyword + "': " + nonMatchingTitles);
+            } else {
+                System.out.println("All titles contain the keyword '" + keyword + "'.");
             }
-            if (currentPage==mainPage.allPages.size()) {
-                break;
-            }
-            mainPage.allPages.get(currentPage).click();
-            currentPage++;
-        }
-        boolean isKeywordFound = titles.stream().anyMatch(title -> title.contains(keyword));
-        Assert.assertTrue("At least one title contains the keyword: " + keyword, isKeywordFound);
+
+
     }
-    @Then("Add the last of found items to Cart")
-    public void add_the_last_of_found_items_to_cart() {
+
+    @Then("Customer adds the last of found items to Cart")
+    public void customer_adds_the_last_of_found_items_to_cart() {
         WebElement lastItem = mainPage.searchResults.get(mainPage.searchResults.size()-1);
         lastItem.click();
         cartPage.addToCart.click();
         BrowserUtils.waitFor(2);
 
     }
-    @Then("Empty the Cart")
-    public void empty_the_cart() {
+    @Then("Customer empty the Cart")
+    public void customer_empty_the_cart() {
         cartPage.CartButton.click();
-        BrowserUtils.waitFor(1);
         cartPage.emptyCartButton.click();
-        BrowserUtils.waitFor(1);
-        Actions act =  new Actions(Driver.getDriver());
-        act.moveToElement(cartPage.emptyCartAlertButton).click().perform();
-        BrowserUtils.waitFor(2);
-        Assert.assertTrue("Your cart is empty", cartPage.isCartEmpty());
+        BrowserUtils.hoverAndClick(cartPage.emptyButton);
+
+
+    }
+    @Then("Customer should see the {string}")
+    public void customer_should_see_the(String emptyMessage) {
+        System.out.println("cartEmptyMessage = " + cartPage.cartEmptyMessage.getText());
+        Assert.assertTrue(emptyMessage, cartPage.isCartEmpty());
     }
 
 }

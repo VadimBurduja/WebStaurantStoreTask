@@ -15,14 +15,14 @@ public class CartPage {
     @FindBy(xpath= "//button[normalize-space()='Empty Cart']")
     public WebElement emptyCartButton;
 
-    @FindBy(css = ".bg-gray-100.border-gray-300.border-solid.border-0.border-t button:nth-child(1)")
-    public WebElement emptyCartAlertButton;
-
     @FindBy(xpath = "//a[@class='btn btn-primary']")
     public WebElement CartButton;
 
     @FindBy(id = "buyButton")
     public WebElement addToCart;
+
+   @FindBy(css = "footer[data-testid='modal-footer'] button.bg-green-500")
+   public WebElement emptyButton;
 
     @FindBy(css = ".header-1")
     public WebElement cartEmptyMessage;
